@@ -1,7 +1,11 @@
-@(message: String)
+@(products: List[Product])
 
-@main("Welcome to Play") {
-
-    @play20.welcome(message, style = "Java")
+@main("Welcome") {
+<h3>Products</h3>
+<ul>
+    @for(p <- products) {
+      <li>@p.getName</li>
+    }
+</ul>
 
 }
