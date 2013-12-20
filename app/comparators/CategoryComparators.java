@@ -8,7 +8,7 @@ import java.util.Comparator;
 /**
  * Utility class with comparators for {@link io.sphere.client.shop.model.Category}.
  */
-public class CategoryComparators {
+public final class CategoryComparators {
     private CategoryComparators() {
     }
 

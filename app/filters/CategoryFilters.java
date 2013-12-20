@@ -6,7 +6,7 @@ import io.sphere.client.filters.expressions.FilterExpressions;
 import io.sphere.client.shop.model.Category;
 import sphere.Sphere;
 
-public class CategoryFilters {
+public final class CategoryFilters {
     private CategoryFilters() {
     }
 
