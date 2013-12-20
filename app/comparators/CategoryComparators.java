@@ -8,7 +8,10 @@ import java.util.Comparator;
 /**
  * Utility class with comparators for {@link io.sphere.client.shop.model.Category}.
  */
-public class CategoryComparator {
+public class CategoryComparators {
+    private CategoryComparators() {
+    }
+
     public static Comparator<Category> byName() {
         return new Comparator<Category>() {
             @Override
@@ -16,8 +19,5 @@ public class CategoryComparator {
                 return ComparisonChain.start().compare(category.getName(), category2.getName()).result();
             }
         };
-    }
-
-    private CategoryComparator() {
     }
 }
