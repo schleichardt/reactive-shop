@@ -1,0 +1,18 @@
+@(pageClass: String, products: List[io.sphere.client.shop.model.Product], categories: List[io.sphere.client.shop.model.Category])
+
+@main("Welcome", pageClass) {
+<h3>Categories</h3>
+<ul id="categories">
+    @for(c <- categories) {
+        <li><a href="@controllers.routes.Application.category(c.getSlug)">@c.getName</a></li>
+    }
+</ul>
+
+<h3>Products</h3>
+<ul>
+    @for(p <- products) {
+      <li>@p.getName</li>
+    }
+</ul>
+
+}

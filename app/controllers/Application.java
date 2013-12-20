@@ -15,13 +15,17 @@ import java.util.List;
 
 public class Application extends ReactiveShopController {
 
-    public static Promise<Result> index() {
+    public static Result index() {
+        return ok(views.html.index.render());
+    }
+
+    public static Promise<Result> pagedProducts() {
         final Promise<SearchResult<Product>> searchResult = sphere().products().all().fetchAsync();
         return searchResult.map(new F.Function<SearchResult<Product>, Result>() {
             @Override
             public Result apply(SearchResult<Product> productSearchResult) throws Throwable {
                 final List<Product> products = productSearchResult.getResults();
-                return ok(index.render("index", products, rootCategories()));
+                return ok(views.html.products.render("index", products, rootCategories()));
             }
         });
     }
@@ -32,7 +36,7 @@ public class Application extends ReactiveShopController {
         return searchRequest.fetchAsync().map(new F.Function<SearchResult<Product>, Result>() {
             @Override
             public Result apply(SearchResult<Product> productSearchResult) throws Throwable {
-                return ok(index.render("category-page", productSearchResult.getResults(), rootCategories()));
+                return ok(views.html.products.render("category-page", productSearchResult.getResults(), rootCategories()));
             }
         });
     }
