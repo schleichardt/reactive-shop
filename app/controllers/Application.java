@@ -1,5 +1,6 @@
 package controllers;
 
+import io.sphere.client.ProductSort;
 import io.sphere.client.model.SearchResult;
 import io.sphere.client.shop.model.Product;
 import play.libs.F;
@@ -15,8 +16,19 @@ import java.util.List;
 
 public class Application extends ReactiveShopController {
 
-    public static Result index() {
-        return ok(views.html.index.render());
+    //TODO cache
+    public static Promise<Result> index() {
+        final int maxSize = 3;
+        return expensiveProducts(maxSize).map(new F.Function<SearchResult<Product>, Result>() {
+            @Override
+            public Result apply(SearchResult<Product> productSearchResult) throws Throwable {
+                return ok(views.html.index.render(productSearchResult.getResults()));
+            }
+        });
+    }
+
+    private static Promise<SearchResult<Product>> expensiveProducts(int maxSize) {
+        return sphere().products().all().sort(ProductSort.price.desc).pageSize(maxSize).fetchAsync();
     }
 
     public static Promise<Result> pagedProducts() {
