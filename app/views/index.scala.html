@@ -1,8 +1,8 @@
-@(premiumProducts: List[io.sphere.client.shop.model.Product])
+@(premiumProducts: List[io.sphere.client.shop.model.Product], categorySnippets: List[play.libs.F.Tuple[io.sphere.client.shop.model.Category, io.sphere.client.shop.model.Product]])
 
 @import io.sphere.client.shop.model.ImageSize
 
-@main("Welcome", "index") {
+@carouselMain("Welcome", "index") {
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <!-- Indicators -->
         <ol class="carousel-indicators">
@@ -30,6 +30,17 @@
         <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
         <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </div><!-- /.carousel -->
+}{
+    <div class="row">
 
+        @categorySnippets.map(x => x._1 -> x._2).map { case (category, product) =>
+            <div class="col-lg-4">
+                @tags.scaledImage(product.getFeaturedImage.getSize(ImageSize.SMALL), classes = "img-circle")
+                <h2>@category.getName</h2>
+                <p>@category.getDescription</p>
+                <p><a class="btn btn-default" href="@controllers.routes.Application.category(category.getSlug)" role="button">View details »</a></p>
+            </div><!-- /.col-lg-4 -->
+        }
 
+    </div>
 }

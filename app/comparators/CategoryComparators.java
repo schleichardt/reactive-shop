@@ -20,4 +20,13 @@ public final class CategoryComparators {
             }
         };
     }
+
+    public static Comparator<Category> byOrderHint() {
+        return new Comparator<Category>() {
+            @Override
+            public int compare(Category category, Category category2) {
+                return ComparisonChain.start().compare(category.getOrderHint(), category2.getOrderHint()).result();
+            }
+        };
+    }
 }

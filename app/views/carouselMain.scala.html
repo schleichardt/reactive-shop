@@ -1,4 +1,4 @@
-@(title: String, pageClass: String)(content: Html)
+@(title: String, pageClass: String)(content: Html)(contentAfterCarousel: Html)
 @* from http://getbootstrap.com/examples/carousel/ *@
 <!DOCTYPE html>
 <html lang="en">
@@ -22,6 +22,7 @@
         @navbar()
         @content
         <div class="container marketing">
+            @contentAfterCarousel
                 <!-- FOOTER -->
             <footer>
                 <p class="pull-right"><a href="#">Back to top</a></p>

@@ -12,6 +12,10 @@ public final class CategoryFilters {
 
     public static FilterExpression byCategory(final String slug) {
         final Category category = Sphere.getInstance().categories().getBySlug(slug);
+        return byCategory(category);
+    }
+
+    public static FilterExpression byCategory(final Category category) {
         return new FilterExpressions.CategoriesOrSubcategories(ImmutableList.of(category));
     }
 }
