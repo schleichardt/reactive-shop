@@ -26,23 +26,21 @@ public class Application extends ReactiveShopController {
     //TODO cache
     public static Promise<Result> index() {
         final Promise<SearchResult<Product>> carouselProductPromise = expensiveProducts(MAX_SIZE_CAROUSEL_ELEMENTS);
-        final List<Promise<Tuple<Category, Product>>> productsPromise = transform(getMostImportantCategories(), new Function<Category, Promise<Tuple<Category, Product>>>() {
+        final Promise<List<Tuple<Category, Product>>> productsPromise = Promises.sequence(getMostImportantCategories(), new Function<Category, Promise<Tuple<Category, Product>>>() {
             @Override
             public Promise<Tuple<Category, Product>> apply(final Category category) {
                 final Promise<SearchResult<Product>> searchResultPromise = sphere().products().all().filter(byCategory(category)).sort(ProductSort.price.desc).pageSize(1).fetchAsync();
                 return searchResultPromise.map(new F.Function<SearchResult<Product>, Tuple<Category, Product>>() {
                     @Override
                     public Tuple<Category, Product> apply(SearchResult<Product> productSearchResult) throws Throwable {
-                        return new Tuple(category, productSearchResult.getResults().get(0));//TODO this can fail if there is no product in this category
+                        return new Tuple<Category, Product>(category, productSearchResult.getResults().get(0));//TODO this can fail if there is no product in this category
                     }
                 });
             }
         });
-        final Promise<List<Tuple<Category, Product>>> prodc = Promises.sequence(productsPromise);
 
-        //todo method, that contains transform and Promises.sequence
 
-        return prodc.flatMap(new F.Function<List<Tuple<Category, Product>>, Promise<Result>>() {
+        return productsPromise.flatMap(new F.Function<List<Tuple<Category, Product>>, Promise<Result>>() {
             @Override
             public Promise<Result> apply(final List<Tuple<Category, Product>> categorySnippets) throws Throwable {
                 return carouselProductPromise.map(new F.Function<SearchResult<Product>, Result>() {
