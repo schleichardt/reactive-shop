@@ -22,4 +22,4 @@ templatesImport += "io.sphere.client.shop.model._"
 
 conflictWarning in ThisBuild ~= { _.copy(level = Level.Debug) }
 
-javacOptions ++= Seq("-source", "1.6", "-target", "1.6")
+javacOptions ++= Seq("-source", "1.6", "-target", "1.6", "-Xlint:unchecked", "-deprecation")
