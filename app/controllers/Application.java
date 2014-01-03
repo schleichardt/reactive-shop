@@ -1,9 +1,7 @@
 package controllers;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import concurrent.Promises;
-import io.sphere.client.ProductSort;
 import io.sphere.client.model.SearchResult;
 import io.sphere.client.shop.model.Category;
 import io.sphere.client.shop.model.Product;
@@ -12,9 +10,9 @@ import play.libs.F.Promise;
 import play.libs.F.Tuple;
 import play.mvc.*;
 
-import static com.google.common.collect.Lists.transform;
 import static filters.CategoryFilters.byCategory;
 import static comparators.CategoryComparators.byOrderHint;
+import static io.sphere.client.ProductSort.*;
 
 import sphere.SearchRequest;
 import java.util.List;
@@ -29,7 +27,7 @@ public class Application extends ReactiveShopController {
         final Promise<List<Tuple<Category, Product>>> productsPromise = Promises.sequence(getMostImportantCategories(), new Function<Category, Promise<Tuple<Category, Product>>>() {
             @Override
             public Promise<Tuple<Category, Product>> apply(final Category category) {
-                final Promise<SearchResult<Product>> searchResultPromise = sphere().products().all().filter(byCategory(category)).sort(ProductSort.price.desc).pageSize(1).fetchAsync();
+                final Promise<SearchResult<Product>> searchResultPromise = sphere().products().all().filter(byCategory(category)).sort(price.desc).pageSize(1).fetchAsync();
                 return searchResultPromise.map(new F.Function<SearchResult<Product>, Tuple<Category, Product>>() {
                     @Override
                     public Tuple<Category, Product> apply(SearchResult<Product> productSearchResult) throws Throwable {
@@ -38,17 +36,10 @@ public class Application extends ReactiveShopController {
                 });
             }
         });
-
-
-        return productsPromise.flatMap(new F.Function<List<Tuple<Category, Product>>, Promise<Result>>() {
+        return Promises.combine(productsPromise, carouselProductPromise, new F.Function2<List<Tuple<Category, Product>>, SearchResult<Product>, Result>() {
             @Override
-            public Promise<Result> apply(final List<Tuple<Category, Product>> categorySnippets) throws Throwable {
-                return carouselProductPromise.map(new F.Function<SearchResult<Product>, Result>() {
-                    @Override
-                    public Result apply(SearchResult<Product> productSearchResult) throws Throwable {
-                        return ok(views.html.index.render(productSearchResult.getResults(), categorySnippets));
-                    }
-                });
+            public Result apply(List<Tuple<Category, Product>> categorySnippets, SearchResult<Product> productSearchResult) throws Throwable {
+                return ok(views.html.index.render(productSearchResult.getResults(), categorySnippets));
             }
         });
     }
@@ -71,7 +62,7 @@ public class Application extends ReactiveShopController {
     }
 
     private static Promise<SearchResult<Product>> expensiveProducts(int maxSize) {
-        return sphere().products().all().sort(ProductSort.price.desc).pageSize(maxSize).fetchAsync();
+        return sphere().products().all().sort(price.desc).pageSize(maxSize).fetchAsync();
     }
 
     public static Promise<Result> pagedProducts() {
