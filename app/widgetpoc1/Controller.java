@@ -15,14 +15,14 @@ public class Controller extends ReactiveShopController {
         public PageData(String title) {
             this.title = title;
         }
+    }
 
-        public Html main(final Html html) {
-            return widgetpoc1.html.Controller.render(html, this);
-        }
+    private static Result render(final Html html, final PageData pageData) {
+        return render(widgetpoc1.html.Controller.apply(html, pageData));
     }
 
     public static Result index() {
         final PageData pageData = new PageData("the page title for index");
-        return render(widgetpoc1.html.index.render(pageData, "additional data"));
+        return render(widgetpoc1.html.index.apply("additional data"), pageData);
     }
 }
