@@ -7,6 +7,7 @@ import static com.google.common.collect.Lists.transform;
 
 import java.util.List;
 
+//the methods are a candiate for sphere.util.Async
 public final class Promises {
     private Promises() {
     }
