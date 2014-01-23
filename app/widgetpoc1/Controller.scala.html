@@ -4,9 +4,18 @@
         <title>@{pageData.title}</title>
         <style>
         body{ background-color: yellowgreen; }
+        .content {width: 400px; float: left; border: 1px solid green;}
+        .widgets { width: 300px; left: 410px; position: absolute;}
+        .widget { border: 1px dotted greenyellow;}
         </style>
     </head>
     <body>
+        <div class="content">
         @content
+        </div>
+        <div class="widgets">
+            @pageData.blindText.html()
+
+        </div>
     </body>
 </html>
