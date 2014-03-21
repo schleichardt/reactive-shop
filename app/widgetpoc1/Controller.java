@@ -17,7 +17,7 @@ public class Controller extends ReactiveShopController {
         }
     }
 
-    //TODO refactor, maybe but some code in base class
+    //TODO refactor
     private static F.Promise<Result> render(final Html html, final PageData pageData) {
         final F.Promise<Html> htmlPromise = PageData.promise(pageData).map(new F.Function<PageData, Html>() {
             @Override
