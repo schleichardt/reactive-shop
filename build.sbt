@@ -10,7 +10,7 @@ libraryDependencies ++= Seq(
 
 play.Project.playJavaSettings
 
-libraryDependencies += "io.sphere" %% "sphere-play-sdk" % "0.51.0" withSources() exclude("org.scala-stm", "scala-stm_2.10.0") exclude("play", "play_2.10")
+libraryDependencies += "io.sphere" %% "sphere-play-sdk" % "0.54.0" withSources() exclude("org.scala-stm", "scala-stm_2.10.0") exclude("play", "play_2.10")
 
 libraryDependencies += "org.webjars" % "bootstrap" % "3.0.3"
 
